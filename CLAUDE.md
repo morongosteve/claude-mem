@@ -23,10 +23,57 @@ Claude-mem is a Claude Code plugin providing persistent memory across sessions. 
 
 **Implementation**: Tag stripping happens at hook layer (edge processing) before data reaches worker/database. See `src/utils/tag-stripping.ts` for shared utilities.
 
+## Source Structure
+
+```
+src/
+├── hooks/           # 5 lifecycle hook entry points (TypeScript → ESM)
+├── sdk/             # Claude Agent SDK integration (index.ts, mcp-server.ts, parser.ts, prompts.ts)
+├── services/
+│   ├── worker-service.ts    # Express API on port 37777
+│   ├── sqlite/              # SQLite storage layer (~/.claude-mem/claude-mem.db)
+│   └── sync/ChromaSync.ts   # Vector embeddings for semantic search
+├── ui/viewer/       # React viewer (built → plugin/ui/viewer.html)
+└── utils/tag-stripping.ts   # Shared privacy tag utilities
+plugin/              # Built output (deployed to ~/.claude/plugins/marketplaces/thedotmack/)
+  scripts/           # Compiled hook .js files + worker-service.cjs
+  skills/            # Skill documents (mem-search/SKILL.md)
+  ui/                # Compiled viewer
+```
+
 ## Build Commands
 
 ```bash
-npm run build-and-sync        # Build, sync to marketplace, restart worker
+npm run build               # Compile hooks only
+npm run build-and-sync      # Build, sync to marketplace, restart worker (primary dev command)
+
+# Worker management
+npm run worker:start        # Start worker service
+npm run worker:stop         # Stop worker service
+npm run worker:restart      # Restart worker
+npm run worker:status       # Check worker health
+npm run worker:logs         # Show today's logs (last 50 lines)
+npm run worker:tail         # Tail logs live
+
+# Testing
+bun test                    # Run all tests
+bun test tests/sqlite/      # SQLite layer tests
+bun test tests/worker/agents/  # Agent tests
+bun test tests/worker/search/  # Search tests
+bun test tests/context/     # Context tests
+
+# Queue management
+npm run queue               # List pending queue
+npm run queue:process       # Process pending queue
+npm run queue:clear         # Clear failed queue
+
+# Cursor integration
+npm run cursor:install      # Install Cursor integration
+npm run cursor:uninstall    # Uninstall Cursor integration
+
+# CLAUDE.md regeneration
+npm run claude-md:regenerate  # Regenerate this file from source
+npm run claude-md:dry-run     # Preview without writing
 ```
 
 ## Configuration
