@@ -60,7 +60,7 @@
     <img src="https://img.shields.io/badge/License-AGPL%203.0-blue.svg" alt="License">
   </a>
   <a href="package.json">
-    <img src="https://img.shields.io/badge/version-6.5.0-green.svg" alt="Version">
+    <img src="https://img.shields.io/badge/version-10.0.0-green.svg" alt="Version">
   </a>
   <a href="package.json">
     <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node">
@@ -171,7 +171,7 @@ Restart Claude Code. Context from previous sessions will automatically appear in
 
 **Core Components:**
 
-1. **5 Lifecycle Hooks** - SessionStart, UserPromptSubmit, PostToolUse, Stop, SessionEnd (6 hook scripts)
+1. **Lifecycle Hooks** - Setup, SessionStart, UserPromptSubmit, PostToolUse, and Stop events drive capture and context injection (registered in `plugin/hooks/hooks.json`)
 2. **Smart Install** - Cached dependency checker (pre-hook script, not a lifecycle hook)
 3. **Worker Service** - HTTP API on port 37777 with web viewer UI and 10 search endpoints, managed by Bun
 4. **SQLite Database** - Stores sessions, observations, summaries
